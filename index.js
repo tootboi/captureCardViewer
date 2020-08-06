@@ -25,3 +25,14 @@ function adjustVolume() {
     const sliderVal = document.getElementById('range').value;
     video.volume = sliderVal;
 }
+
+var timeout;
+document.onmousemove = function(){
+    document.getElementById('menu').style.opacity = 1;
+    document.getElementsByClassName('container')[0].style.cursor = 'auto';
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+        document.getElementById('menu').style.opacity = 0;
+        document.getElementsByClassName('container')[0].style.cursor = 'none';
+    }, 3000);
+}
