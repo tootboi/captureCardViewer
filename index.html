@@ -10,9 +10,13 @@
         <title>Capture Card Viewer</title>
     </head>
 
-    <body>
+    <body onmouseover="showMenu()" onmouseout="hideMenu()">
         <div class="container">
             <video autoplay='true' id="video"></video>
+        </div>
+
+        <div id="menu">
+            <input oninput="adjustVolume()" class="slider" id="range" type="range" min='0' max='1' value="1" step="0.01">
         </div>
 
     <!-- Custom JavaScript -->

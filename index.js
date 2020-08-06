@@ -3,8 +3,8 @@ const constraints = {audio: {sampleRate: 96000, echoCancellation: false, autoGai
 
 navigator.mediaDevices.getUserMedia(constraints)
     .then((mediaStream) => {
-        console.log(mediaStream.getTracks()[0].getSettings());
-        console.log(mediaStream.getTracks()[1].getSettings());
+        // console.log(mediaStream.getTracks()[0].getSettings());
+        // console.log(mediaStream.getTracks()[1].getSettings());
 
         video.srcObject = mediaStream;
         video.onloadedmetadata = function(e) {
@@ -12,3 +12,16 @@ navigator.mediaDevices.getUserMedia(constraints)
           };
     })
     .catch(function(err) { console.log(err.name + ": " + err.message); });
+
+function showMenu() {
+    document.getElementById('menu').style.opacity = 1;
+}
+
+function hideMenu() {
+    document.getElementById('menu').style.opacity = 0;
+}
+
+function adjustVolume() {
+    const sliderVal = document.getElementById('range').value;
+    video.volume = sliderVal;
+}
