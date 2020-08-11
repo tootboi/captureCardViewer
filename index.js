@@ -36,3 +36,21 @@ document.onmousemove = function(){
         document.getElementsByClassName('container')[0].style.cursor = 'none';
     }, 3000);
 }
+
+function screenSelect() {
+    const userInput = document.getElementById('screen').value;
+    switch(userInput) {
+        case 'Both':
+            document.getElementById('canvasWrapper').style.display = 'flex';
+            document.getElementById('videoWrapper').style.display = 'flex';
+            break;
+        case 'Original':
+            document.getElementById('canvasWrapper').style.display = 'none';
+            document.getElementById('videoWrapper').style.display = 'contents';
+            break;
+        case 'Processed':
+            document.getElementById('canvasWrapper').style.display = 'contents';
+            document.getElementById('videoWrapper').style.display = 'none';
+            break;
+    }
+}
