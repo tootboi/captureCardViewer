@@ -11,17 +11,33 @@
     </head>
 
     <body onmouseover="showMenu()" onmouseout="hideMenu()">
-        <div style="color: #f8f8f8;">
-            Brightness: 
-            <input type="number" name="" id="brightness" value="0">
-        </div>
+        
         <div class="container">
-            <video autoplay='true' id="video"></video>
-            <canvas id="processed"></canvas>
+            <div id="videoWrapper"><video autoplay='true' id="video"></video></div>
+            <div id="canvasWrapper"><canvas id="processed"></canvas></div>
+            
         </div>
 
         <div id="menu">
             <input oninput="adjustVolume()" class="slider" id="range" type="range" min='0' max='1' value="1" step="0.01">
+            <span id="subMenu">
+                Brightness: 
+                <input type="number" name="" id="brightness" value="0">
+                Convolution Matrix:
+                <select name="matrix" id="matrix">
+                    <option value="none">none</option>
+                    <option value="sharpen">sharpen</option>
+                    <option value="edgeDetect">edgeDetect</option>
+                    <option value="emboss">emboss</option>
+                    <option value="blur">blur</option>
+                </select>
+                Screen:
+                <select name="screen" id="screen" onchange="screenSelect()">
+                    <option value="Both">Both</option>
+                    <option value="Original">Original</option>
+                    <option value="Processed">Processed</option>
+                </select>
+            </span>
         </div>
 
     <!-- Custom JavaScript -->

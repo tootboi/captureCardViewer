@@ -29,14 +29,33 @@ function computeFrame() {
 
     let divisor = 1;
     let offset = 0;
+    let none = [[0, 0,  0],[0,  1, 0],[0, 0,  0]];
     let sharpen = [[0, -1,  0],[-1,  5, -1],[0, -1,  0]];
     let edgeDetect = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
     let emboss = [[-2, 1, 0], [-1, 1, 1], [0, 1, 2]];
     let blur = [[.1, .1, .1], [.1, .1, .1], [.1, .1, .1]];
     let antiAlias = [[0, 1,  0],[1,  2, 1],[0, 1,  0]];
 
-    //sharpening
-    frame = convolve(sharpen, divisor, offset);
+    const userInput = document.getElementById('matrix').value;
+    let matrix;
+    switch (userInput) {
+        case 'sharpen':
+            matrix = [[0, -1,  0],[-1,  5, -1],[0, -1,  0]];
+            break;
+        case 'edgeDetect':
+            matrix = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
+            break;
+        case 'emboss':
+            matrix = [[-2, 1, 0], [-1, 1, 1], [0, 1, 2]];
+            break;
+        case 'blur':
+            matrix = [[.1, .1, .1], [.1, .1, .1], [.1, .1, .1]];
+            break;
+    }
+    
+    if(userInput !== 'none') {
+        frame = convolve(matrix, divisor, offset);
+    }
 
     context.putImageData(frame, 0, 0);
     //calls itself
@@ -54,7 +73,7 @@ window.addEventListener('resize', () => {
 });
 
 function resize() {
-    viewWidth = window.innerWidth / 2;
+    viewWidth = window.innerWidth;
     viewHeight = (viewWidth / 16) * 9;
     ogCanvas.setAttribute('width', viewWidth);
     ogCanvas.setAttribute('height', viewHeight);
