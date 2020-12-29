@@ -1,6 +1,8 @@
 const video = document.getElementById('video');
 const constraints = {audio: {sampleRate: 96000, echoCancellation: false, autoGainControl: false}, video: {aspectRatio: 16/9, resizeMode: 'none', frameRate: 30}}
 
+screenSelect();
+
 navigator.mediaDevices.getUserMedia(constraints)
     .then((mediaStream) => {
         // console.log(mediaStream.getTracks()[0].getSettings());
