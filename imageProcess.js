@@ -21,35 +21,33 @@ function computeFrame() {
     let data = frame.data;
     //brightness level
     let level = Number(document.getElementById('brightness').value);
-    for (var i=0; i<data.length; i+=4) {
+    let len = data.length;
+    for (var i=0; i<len; i+=4) {
         data[i] += level;       //r
         data[i + 1] += level;   //g
         data[i +  2] += level;  //b
     }
 
     let divisor = 1;
-    let offset = 0;
-    let none = [[0, 0,  0],[0,  1, 0],[0, 0,  0]];
-    let sharpen = [[0, -1,  0],[-1,  5, -1],[0, -1,  0]];
-    let edgeDetect = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
-    let emboss = [[-2, 1, 0], [-1, 1, 1], [0, 1, 2]];
-    let blur = [[.1, .1, .1], [.1, .1, .1], [.1, .1, .1]];
-    let antiAlias = [[0, 1,  0],[1,  2, 1],[0, 1,  0]];
+    let offset = level;
 
     const userInput = document.getElementById('matrix').value;
     let matrix;
     switch (userInput) {
+        case 'none': //can use this and offset to control brightness. but need to resolve framerate issue first.
+            matrix = [0, 0, 0, 0, 1, 0, 0, 0, 0];
+            break;
         case 'sharpen':
-            matrix = [[0, -1,  0],[-1,  5, -1],[0, -1,  0]];
+            matrix = [0, -1,  0, -1, 5, -1, 0, -1, 0];
             break;
         case 'edgeDetect':
-            matrix = [[0, 1, 0], [1, -4, 1], [0, 1, 0]];
+            matrix = [0, 1, 0, 1, -4, 1, 0, 1, 0];
             break;
         case 'emboss':
-            matrix = [[-2, 1, 0], [-1, 1, 1], [0, 1, 2]];
+            matrix = [-2, 1, 0, -1, 1, 1, 0, 1, 2];
             break;
         case 'blur':
-            matrix = [[.1, .1, .1], [.1, .1, .1], [.1, .1, .1]];
+            matrix = [.1, .1, .1, .1, .1, .1, .1, .1, .1];
             break;
     }
     
@@ -73,6 +71,7 @@ window.addEventListener('resize', () => {
 });
 
 function resize() {
+    //dividing viewWidth by a factor improves framerate at the cost of image quality.
     viewWidth = window.innerWidth;
     viewHeight = (viewWidth / 16) * 9;
     ogCanvas.setAttribute('width', viewWidth);
@@ -84,10 +83,6 @@ function resize() {
 };
 
 function convolve(matrix, divisor, offset) {
-    let m = [].concat(matrix[0], matrix[1], matrix[2]);
-    // if(!divisor) {
-    //     divisor = m.reduce(function(a, b) {return a+b}) || 1;
-    // }
     let olddata = frame;
     let oldpx = olddata.data;
     let newdata = context.createImageData(olddata);
@@ -97,6 +92,7 @@ function convolve(matrix, divisor, offset) {
     let w = frame.width;
 
     for (var i=0; i<len; i++) {
+        //skip if it is alpha channel
         if ((i+1) % 4 === 0) {
             newpx[i] = oldpx[i];
             continue;
@@ -114,7 +110,7 @@ function convolve(matrix, divisor, offset) {
             oldpx[i + w * 4 + 4] || oldpx[i]
         ];
         for (var j=0; j < 9; j++) {
-            res += these[j] * m[j];
+            res += these[j] * matrix[j];
         }
         res /= divisor;
         if(offset) {
